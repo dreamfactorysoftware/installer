@@ -29,7 +29,7 @@ class Installer extends LibraryInstaller
             );
         }
 
-        $class = __NAMESPACE__ . $this->supportedTypes[$frameworkType];
+        $class = __NAMESPACE__ . '\\' . $this->supportedTypes[$frameworkType];
 
         /** @type BaseInstaller $installer */
         $installer = new $class( $package, $this->composer );
@@ -110,7 +110,7 @@ class Installer extends LibraryInstaller
         $pattern = false;
         if ( !empty( $this->supportedTypes[$frameworkType] ) )
         {
-            $frameworkClass = __NAMESPACE__ . $this->supportedTypes[$frameworkType];
+            $frameworkClass = __NAMESPACE__ . '\\' . $this->supportedTypes[$frameworkType];
             /** @var BaseInstaller $framework */
             $framework = new $frameworkClass( null, $this->composer );
             $locations = array_keys( $framework->getLocations() );
