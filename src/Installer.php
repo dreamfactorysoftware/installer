@@ -1,4 +1,5 @@
 <?php
+
 namespace DreamFactory\Tools\Composer\Installer;
 
 use Composer\Installer\LibraryInstaller;
@@ -12,12 +13,12 @@ class Installer extends LibraryInstaller
      *
      * @var array
      */
-    private $supportedTypes = array(
+    private array $supportedTypes = [
         'dreamfactory' => 'DreamFactoryInstaller',
-    );
+    ];
 
     /** {@inheritDoc} */
-    public function getInstallPath( PackageInterface $package )
+    public function getInstallPath( PackageInterface $package ): string
     {
         $type = $package->getType();
         $frameworkType = $this->findFrameworkType( $type );
@@ -38,7 +39,7 @@ class Installer extends LibraryInstaller
     }
 
     /** {@inheritDoc} */
-    public function uninstall( InstalledRepositoryInterface $repo, PackageInterface $package )
+    public function uninstall( InstalledRepositoryInterface $repo, PackageInterface $package ): void
     {
         if ( !$repo->hasPackage( $package ) )
         {
@@ -58,7 +59,7 @@ class Installer extends LibraryInstaller
     }
 
     /** {@inheritDoc} */
-    public function supports( $packageType )
+    public function supports( $packageType ): bool
     {
         $frameworkType = $this->findFrameworkType( $packageType );
 
@@ -75,11 +76,11 @@ class Installer extends LibraryInstaller
     /**
      * Finds a supported framework type if it exists and returns it
      *
-     * @param  string $type
+     * @param string $type
      *
-     * @return string
+     * @return bool|string
      */
-    protected function findFrameworkType( $type )
+    protected function findFrameworkType( $type ): bool|string
     {
         $frameworkType = false;
 
@@ -87,7 +88,7 @@ class Installer extends LibraryInstaller
 
         foreach ( $this->supportedTypes as $key => $val )
         {
-            if ( $key === substr( $type, 0, strlen( $key ) ) )
+            if (str_starts_with($type, $key))
             {
                 $frameworkType = substr( $type, 0, strlen( $key ) );
                 break;
@@ -101,11 +102,11 @@ class Installer extends LibraryInstaller
      * Get the second part of the regular expression to check for support of a
      * package type
      *
-     * @param  string $frameworkType
+     * @param string $frameworkType
      *
-     * @return string
+     * @return bool|string
      */
-    protected function getLocationPattern( $frameworkType )
+    protected function getLocationPattern( $frameworkType ): bool|string
     {
         $pattern = false;
         if ( !empty( $this->supportedTypes[$frameworkType] ) )

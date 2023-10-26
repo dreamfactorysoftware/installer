@@ -1,4 +1,5 @@
 <?php
+
 namespace DreamFactory\Tools\Composer\Installer;
 
 class DreamFactoryInstaller extends BaseInstaller
@@ -6,7 +7,7 @@ class DreamFactoryInstaller extends BaseInstaller
     /**
      * @type array This installer's paths
      */
-    protected $locations = array(
+    protected array $locations = array(
         'plugin'  => 'storage/plugins/{$vendor}/{$name}/',
         'library' => 'storage/plugins/{$vendor}/{$name}/',
         //  DSP v1.x
@@ -20,7 +21,7 @@ class DreamFactoryInstaller extends BaseInstaller
      *
      * @return array
      */
-    public function getLocations()
+    public function getLocations(): array
     {
         static $_cwd = null;
         static $_paths = array(

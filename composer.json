@@ -27,7 +27,7 @@
         }
     },
     "require-dev": {
-        "composer/composer": "1.0.*@dev",
+        "composer/composer": "2.6.*",
         "phpunit/phpunit": "@stable"
     }
 }

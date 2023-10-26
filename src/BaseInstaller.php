@@ -1,4 +1,5 @@
 <?php
+
 namespace DreamFactory\Tools\Composer\Installer;
 
 use Composer\Composer;
@@ -6,15 +7,15 @@ use Composer\Package\PackageInterface;
 
 abstract class BaseInstaller
 {
-    protected $locations = array();
-    protected $composer;
-    protected $package;
+    protected array $locations = [];
+    protected ?Composer $composer;
+    protected ?PackageInterface $package;
 
     /**
      * Initializes base installer.
      *
-     * @param PackageInterface $package
-     * @param Composer         $composer
+     * @param PackageInterface|null $package
+     * @param Composer|null $composer
      */
     public function __construct( PackageInterface $package = null, Composer $composer = null )
     {
@@ -26,16 +27,16 @@ abstract class BaseInstaller
      * Return the install path based on package type.
      *
      * @param  PackageInterface $package
-     * @param  string           $frameworkType
+     * @param string $frameworkType
      *
      * @return string
      */
-    public function getInstallPath( PackageInterface $package, $frameworkType = '' )
+    public function getInstallPath(PackageInterface $package, string $frameworkType = '' ): string
     {
         $type = $this->package->getType();
 
         $prettyName = $this->package->getPrettyName();
-        if ( strpos( $prettyName, '/' ) !== false )
+        if (str_contains($prettyName, '/'))
         {
             list( $vendor, $name ) = explode( '/', $prettyName );
         }
@@ -55,7 +56,6 @@ abstract class BaseInstaller
 
         if ( $this->composer->getPackage() )
         {
-            /** @noinspection PhpUndefinedMethodInspection */
             $extra = $this->composer->getPackage()->getExtra();
 
             if ( !empty( $extra['installer-paths'] ) )
@@ -85,7 +85,7 @@ abstract class BaseInstaller
      *
      * @return array
      */
-    public function inflectPackageVars( $vars )
+    public function inflectPackageVars( $vars ): array
     {
         return $vars;
     }
@@ -95,7 +95,7 @@ abstract class BaseInstaller
      *
      * @return array
      */
-    public function getLocations()
+    public function getLocations(): array
     {
         return $this->locations;
     }
@@ -108,9 +108,9 @@ abstract class BaseInstaller
      *
      * @return string
      */
-    protected function templatePath( $path, array $vars = array() )
+    protected function templatePath( $path, array $vars = array() ): string
     {
-        if ( strpos( $path, '{' ) !== false )
+        if (str_contains($path, '{'))
         {
             extract( $vars );
             preg_match_all( '@\{\$([A-Za-z0-9_]*)\}@i', $path, $matches );
@@ -129,13 +129,13 @@ abstract class BaseInstaller
     /**
      * Search through a passed paths array for a custom install path.
      *
-     * @param  array  $paths
-     * @param  string $name
-     * @param  string $type
+     * @param array $paths
+     * @param string $name
+     * @param string $type
      *
-     * @return string
+     * @return bool|string
      */
-    protected function mapCustomInstallPaths( array $paths, $name, $type )
+    protected function mapCustomInstallPaths( array $paths, $name, $type ): bool|string
     {
         foreach ( $paths as $path => $names )
         {
